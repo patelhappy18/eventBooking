@@ -32,7 +32,7 @@
 {{/if}}
 
 <h2>Scan Ticket QR Code</h2>
-<div id="reader" style="width: 600px"></div>
+<div id="reader" style="width: 750px"></div>
 <p id="result"></p>
 
 
@@ -58,7 +58,7 @@
   function onScanSuccess(decodedText) {
     setTimeout(() => {
     window.location.href = `/users/validate/${decodedText}`;
-    }, 4000);
+    }, 3000);
     canScan = false; // block further scans
 
     // Allow scanning again after 4 seconds
@@ -66,19 +66,17 @@
   }
 
   window.onload = () => {
-    const html5QrCode = new Html5Qrcode("reader");
-    const savedCamera = localStorage.getItem("preferredCamera");
+  const html5QrCode = new Html5Qrcode("reader");
 
-    if (savedCamera) {
-      html5QrCode.start(savedCamera, { fps: 10, qrbox: 250 }, onScanSuccess);
-    } else {
-      Html5Qrcode.getCameras().then(devices => {
-        const cameraId = devices[0].id;
-        localStorage.setItem("preferredCamera", cameraId);
-        html5QrCode.start(cameraId, { fps: 10, qrbox: 250 }, onScanSuccess);
-      });
-    }
-  };
+  html5QrCode.start(
+    { facingMode: "environment" }, // 👈 Use back camera
+    { fps: 10, qrbox: 250 },
+    onScanSuccess
+  ).catch(err => {
+    console.error("Camera start error:", err);
+    document.getElementById("result").innerText = "Camera access failed!";
+  });
+};
 
 </script>
 
