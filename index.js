@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
   res.render("dashboard");
 });
 
-app.get("/admin/scan", (req, res) => {
+app.get("/admin/scanner", (req, res) => {
   res.render("scanner"); // shows the scanner page
 });
 

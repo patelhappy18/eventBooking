@@ -15,8 +15,6 @@ router.route("/ticket/confirmation").get(ticketConfirmation);
 
 router.route("/get-ticket").post(getMyTickets);
 
-router.route("/scan").get(scanQrCode);
-
 router.route("/validate/:ticketId").get(validateTicket);
 
 module.exports = router;

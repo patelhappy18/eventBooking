@@ -4,12 +4,36 @@
   <title>Admin</title>
    <!-- Add this in your <head> or before </body> -->
 <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    .flash {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      color: white;
+      z-index: 9999;
+    }
+    .flash.success { background-color: #28a745; }
+    .flash.error { background-color: #dc3545; }
+    .flash.warning { background-color: #ffc107; color: #333; }
+  </style>
+</body>
 
 </head>
 <body>
+{{#if msg}}
+    <div id="flash-message" class="flash {{type}}">
+      {{msg}}
+    </div>
+  {{/if}}
 <h2>Scan Ticket QR Code</h2>
 <div id="reader" style="width: 300px"></div>
 <p id="result"></p>
+
+
 
 <script>
   function onScanSuccess(decodedText, decodedResult) {
@@ -37,6 +61,13 @@
     console.error("Camera error:", err);
     document.getElementById("result").innerText = "Camera access error!";
   });
+
+    window.onload = function () {
+      const flash = document.getElementById("flash-message");
+      if (flash) {
+        setTimeout(() => flash.style.display = "none", 4000);
+      }
+    };
 </script>
 
 

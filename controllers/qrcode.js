@@ -4,10 +4,6 @@ const Ticket = require("../models/ticket"); // adjust path as needed
 
 let bookings = []; // In-memory for now; use DB for real use
 
-const scanQrCode = async (req, res) => {
-  res.render("scan"); // shows the scanner page
-};
-
 const bookTicket = async (req, res) => {
   const { name, email, phone, ticketCount } = req.body;
   const count = parseInt(ticketCount) || 1;
@@ -47,13 +43,19 @@ const bookTicket = async (req, res) => {
 
 const validateTicket = async (req, res) => {
   const id = req.params.ticketId;
-  const ticket = bookings.find((t) => t.id === id);
+  const ticket = await Ticket.findOne({ ticketId: req.params.ticketId });
+  if (!ticket) {
+    return res.redirect(`/admin/scanner?msg=❌ Invalid Ticket&type=error`);
+  }
 
-  if (!ticket) return res.send("❌ Invalid Ticket");
-  if (ticket.status === "used") return res.send("⚠️ Already Used");
+  if (ticket.status === "used") {
+    return res.redirect(`/admin/scanner?msg=⚠️ Already Used&type=warning`);
+  }
 
   ticket.status = "used";
-  return res.send("✅ Ticket Validated");
+  await ticket.save();
+
+  return res.redirect(`/admin/scanner?msg=✅ Ticket Validated&type=success`);
 };
 
 const ticketConfirmation = async (req, res) => {
@@ -104,7 +106,6 @@ const getMyTickets = async (req, res) => {
 };
 
 module.exports = {
-  scanQrCode,
   validateTicket,
   bookTicket,
   ticketConfirmation,
