@@ -24,50 +24,62 @@
 
 </head>
 <body>
-{{#if msg}}
-    <div id="flash-message" class="flash {{type}}">
-      {{msg}}
-    </div>
-  {{/if}}
+ 
+ {{#if msg}}
+  <div id="flash-message" class="flash {{type}}">
+    {{msg}}
+  </div>
+{{/if}}
+
 <h2>Scan Ticket QR Code</h2>
-<div id="reader" style="width: 300px"></div>
+<div id="reader" style="width: 600px"></div>
 <p id="result"></p>
 
 
 
 <script>
-  function onScanSuccess(decodedText, decodedResult) {
-    console.log(`QR Code detected: ${decodedText}`);
-    document.getElementById("result").innerText = "Validating...";
+  const params = new URLSearchParams(window.location.search);
+  const msg = params.get("msg");
+  const type = params.get("type");
 
-    // Redirect to validate route
-    window.location.href = `/users/validate/${decodedText}`;
+  if (msg) {
+    const flash = document.getElementById("flash-message");
+    flash.innerText = msg;
+    flash.classList.add(type);
+    flash.style.display = "block";
+
+    setTimeout(() => {
+      flash.style.display = "none";
+    }, 3000);
   }
 
-  const html5QrCode = new Html5Qrcode("reader");
+ let canScan = true; // cooldown flag
 
-  Html5Qrcode.getCameras().then(devices => {
-    if (devices && devices.length) {
-      html5QrCode.start(
-        { facingMode: "environment" }, // rear camera
-        {
-          fps: 10,
-          qrbox: 250
-        },
-        onScanSuccess
-      );
+  function onScanSuccess(decodedText) {
+    setTimeout(() => {
+    window.location.href = `/users/validate/${decodedText}`;
+    }, 4000);
+    canScan = false; // block further scans
+
+    // Allow scanning again after 4 seconds
+
+  }
+
+  window.onload = () => {
+    const html5QrCode = new Html5Qrcode("reader");
+    const savedCamera = localStorage.getItem("preferredCamera");
+
+    if (savedCamera) {
+      html5QrCode.start(savedCamera, { fps: 10, qrbox: 250 }, onScanSuccess);
+    } else {
+      Html5Qrcode.getCameras().then(devices => {
+        const cameraId = devices[0].id;
+        localStorage.setItem("preferredCamera", cameraId);
+        html5QrCode.start(cameraId, { fps: 10, qrbox: 250 }, onScanSuccess);
+      });
     }
-  }).catch(err => {
-    console.error("Camera error:", err);
-    document.getElementById("result").innerText = "Camera access error!";
-  });
+  };
 
-    window.onload = function () {
-      const flash = document.getElementById("flash-message");
-      if (flash) {
-        setTimeout(() => flash.style.display = "none", 4000);
-      }
-    };
 </script>
 
 

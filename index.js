@@ -9,6 +9,8 @@ const MongoStore = require("connect-mongo");
 
 const oneDay = 1000 * 60 * 60 * 24;
 
+const flash = require("connect-flash");
+
 const connectDB = require("./db/connect");
 
 const users = require("./routes/users");
@@ -17,8 +19,13 @@ const handlebars = require("express-handlebars");
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
+
 app.use(express.static("public"));
+
 app.use(express.json());
+
+app.use(flash());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
@@ -40,7 +47,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/admin/scanner", (req, res) => {
-  res.render("scanner"); // shows the scanner page
+  const { msg, type } = req.query;
+  res.render("scanner", { msg, type });
 });
 
 const start = async () => {

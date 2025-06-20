@@ -44,12 +44,8 @@ const bookTicket = async (req, res) => {
 const validateTicket = async (req, res) => {
   const id = req.params.ticketId;
   const ticket = await Ticket.findOne({ ticketId: req.params.ticketId });
-  if (!ticket) {
+  if (!ticket || ticket.status === "used") {
     return res.redirect(`/admin/scanner?msg=❌ Invalid Ticket&type=error`);
-  }
-
-  if (ticket.status === "used") {
-    return res.redirect(`/admin/scanner?msg=⚠️ Already Used&type=warning`);
   }
 
   ticket.status = "used";
