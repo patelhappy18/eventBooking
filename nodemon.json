@@ -1,0 +1,5 @@
+{
+    "watch": ["views", "index.js"],
+    "ext": "js,hbs,handlebars",
+    "exec": "node index.js"
+  }

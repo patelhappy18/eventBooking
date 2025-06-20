@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>Chanasma Ujavni</title>
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
+    <link rel="stylesheet" href="assets/css/animated.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+
+    <style>
+  .popupContainer {
+    position: fixed;
+    z-index: 1000;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+  }
+
+  .popupBody {
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+  }
+
+  .popupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: #222;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .modal_close {
+    cursor: pointer;
+  }
+
+
+  .form-toggle {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .form-toggle button {
+      width: 48%;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      background-color: #eee;
+      border-radius: 5px;
+    }
+    .form-toggle button.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    .form-section {
+      display: none;
+    }
+    .form-section.active {
+      display: block;
+    }
+
+</style>
+
+  </head>
+
+<body>
+
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav d-flex justify-content-center align-items-center">
+  <a href="index.html" class="logo"></a>
+
+  <div class="text-center" style="flex-grow: 1;">
+    <h2>ચાણસ્મા</h2>
+  </div>
+
+  <a class='menu-trigger'>
+    <span>Menu</span>
+  </a>
+</nav>
+
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div id="modal" class="popupContainer" style="display:none;">
+    <div class="popupHeader">
+        <span class="header_title">Login</span>
+        <span class="modal_close"><i class="fa fa-times"></i></span>
+    </div>
+
+</div>
+
+  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6 align-self-center">
+              <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h2>ચાણસ્મા ઉજવણી </h2>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="white-button first-button scroll-to-section">
+                    <a href="javascript:void(0);" onclick="openModal('bookTicketModal')">Book your Ticket</a>
+                    </div>
+                    <div class="white-button scroll-to-section">
+                    <a href="javascript:void(0);" onclick="openModal('checkTicketModal')">Check your Ticket</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                <img width="300" height="600" src="assets/images/sun-temple.jpg" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Book Ticket Modal -->
+<div id="bookTicketModal" class="popupContainer" style="display:none;">
+
+  <div class="popupBody">
+        <span class="header_title">Book Your Ticket</span>
+    <span class="modal_close" onclick="closeModal('bookTicketModal')"><i class="fa fa-times"></i></span>
+    <br><br>
+    <form action="/users/bookTicket" method="post">
+    <div class="form-group">
+    <label for="exampleInputEmail1">Full Name</label>
+    <input type="email" class="form-control" id="fullname" name="fullname" placeholder="તમારું નામ" required>
+    </div><br>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="તમારું ઈમેલ" required>
+    </div><br>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Phone Number</label>
+        <input type="password" class="form-control" id="phone" name="phone" placeholder="તમારો ફોન નંબર" required>
+    </div><br>
+<label for="ticketCount">Number of Tickets (ટિકિટોની સંખ્યા):</label>
+<select name="ticketCount" id="ticketCount" required>
+  <option value="1">1 Ticket</option>
+  <option value="2">2 Tickets</option>
+  <option value="3">3 Tickets</option>
+  <option value="4">4 Tickets</option>
+  <option value="5">5 Tickets</option>
+</select>
+    <button type="submit" class="btn btn-primary">Book My Ticket</button>
+</form>
+  </div>
+</div>
+
+<!-- Check Ticket Modal -->
+<div id="checkTicketModal" class="popupContainer" style="display:none;">
+  <div class="popupBody">
+     <span class="header_title">Check Your Ticket</span>
+    <span class="modal_close" onclick="closeModal('checkTicketModal')"><i class="fa fa-times"></i></span>
+    <br>
+
+ <div class="form-toggle">
+      <button id="phoneBtn" class="active" onclick="toggleForm('phone')">Use Phone</button>
+      <button id="emailBtn" onclick="toggleForm('email')">Use Email </button>
+    </div>
+
+    <!-- Phone Login Form -->
+    <form id="phoneForm" class="form-section active" action="" method="POST">
+      <label for="phone">Phone Number:</label>
+      <input class="form-control" type="text" name="phone" id="phone" required placeholder="તમારો ફોન નંબર" />
+        <br>
+    <button type="submit" class="btn btn-primary">Get My Tickets</button>
+    </form>
+
+    <!-- Email Login Form -->
+    <form id="emailForm" class="form-section" action="" method="POST">
+      <label for="email">Email Address:</label>
+      <input class="form-control" type="email" name="email" id="email" required placeholder="તમારું ઈમેલ" />
+        <br>
+    <button type="submit" class="btn btn-primary">Get My Tickets</button>
+    </form>
+  </div>
+</div>
+
+
+ <script>
+  function openModal(id) {
+    document.getElementById(id).style.display = 'block';
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  // Optional: close modal on background click
+  window.onclick = function(event) {
+    if (event.target.classList.contains('popupContainer')) {
+      event.target.style.display = "none";
+    }
+  };
+
+  function toggleForm(type) {
+      const phoneForm = document.getElementById('phoneForm');
+      const emailForm = document.getElementById('emailForm');
+      const phoneBtn = document.getElementById('phoneBtn');
+      const emailBtn = document.getElementById('emailBtn');
+
+      if (type === 'phone') {
+        phoneForm.classList.add('active');
+        emailForm.classList.remove('active');
+        phoneBtn.classList.add('active');
+        emailBtn.classList.remove('active');
+      } else {
+        phoneForm.classList.remove('active');
+        emailForm.classList.add('active');
+        phoneBtn.classList.remove('active');
+        emailBtn.classList.add('active');
+      }
+    }
+</script>
+
+  <!-- Scripts -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/owl-carousel.js"></script>
+  <script src="assets/js/animation.js"></script>
+  <script src="assets/js/imagesloaded.js"></script>
+  <script src="assets/js/popup.js"></script>
+  <script src="assets/js/custom.js"></script>
+</body>
+</html>

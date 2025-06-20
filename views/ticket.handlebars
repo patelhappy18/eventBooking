@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Tickets</title>
+</head>
+<body>
+  <h2>Thanks for booking, {{name}}!</h2>
+  <h3>You have booked {{tickets.length}} ticket(s)</h3>
+
+  {{#each tickets}}
+    <div style="margin-bottom: 20px;">
+      <p><strong>Ticket ID:</strong> {{this.ticketId}}</p>
+      <img src="{{this.qrCode}}" width="200" />
+    </div>
+  {{/each}}
+</body>
+</html>
