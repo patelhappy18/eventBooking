@@ -37,11 +37,8 @@ const bookTicket = async (req, res) => {
       });
     }
 
-    // Render all tickets
-    res.render("ticket", {
-      name,
-      tickets: ticketList,
-    });
+    req.session.latestBooking = { name, tickets: ticketList };
+    res.json({ redirectUrl: "users/ticket/confirmation" });
   } catch (err) {
     console.error("Booking error:", err);
     res.status(500).send("An error occurred while booking.");
@@ -59,8 +56,57 @@ const validateTicket = async (req, res) => {
   return res.send("✅ Ticket Validated");
 };
 
+const ticketConfirmation = async (req, res) => {
+  const booking = req.session.latestBooking;
+  if (!booking) return res.status(400).send("No recent booking found");
+
+  res.render("ticket", {
+    name: booking.name,
+    tickets: booking.tickets,
+  });
+};
+
+const getMyTickets = async (req, res) => {
+  const { email, phone } = req.body;
+
+  if (!email && !phone) {
+    return res.status(400).send("Please provide either email or phone.");
+  }
+
+  try {
+    const query = [];
+
+    if (email) query.push({ email: email.trim().toLowerCase() });
+    if (phone) query.push({ phone: phone.trim() });
+
+    const tickets = await Ticket.find({ $or: query });
+    console.log(tickets);
+
+    if (tickets.length === 0) {
+      return res.render("no-tickets", { message: "No tickets found." });
+    }
+
+    const qrTicketList = await Promise.all(
+      tickets.map(async (t) => ({
+        ticketId: t.ticketId,
+        qrCode: await QRCode.toDataURL(t.ticketId),
+      }))
+    );
+
+    res.render("ticket", {
+      name: tickets[0].name,
+      tickets: qrTicketList,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   scanQrCode,
   validateTicket,
   bookTicket,
+  ticketConfirmation,
+  getMyTickets,
 };

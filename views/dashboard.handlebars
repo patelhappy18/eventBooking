@@ -169,10 +169,10 @@
         <span class="header_title">Book Your Ticket</span>
     <span class="modal_close" onclick="closeModal('bookTicketModal')"><i class="fa fa-times"></i></span>
     <br><br>
-    <form action="/users/bookTicket" method="post">
+    <form id="bookForm" action="/users/bookTicket" method="post">
     <div class="form-group">
     <label for="exampleInputEmail1">Full Name</label>
-    <input type="email" class="form-control" id="fullname" name="fullname" placeholder="તમારું નામ" required>
+    <input type="text" class="form-control" id="fullname" name="name" placeholder="તમારું નામ" required>
     </div><br>
     <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
@@ -180,7 +180,7 @@
     </div><br>
     <div class="form-group">
         <label for="exampleInputPassword1">Phone Number</label>
-        <input type="password" class="form-control" id="phone" name="phone" placeholder="તમારો ફોન નંબર" required>
+        <input type="text" class="form-control" id="phone" name="phone" placeholder="તમારો ફોન નંબર" required>
     </div><br>
 <label for="ticketCount">Number of Tickets (ટિકિટોની સંખ્યા):</label>
 <select name="ticketCount" id="ticketCount" required>
@@ -208,7 +208,7 @@
     </div>
 
     <!-- Phone Login Form -->
-    <form id="phoneForm" class="form-section active" action="" method="POST">
+    <form id="phoneForm" class="form-section active" action="/users/get-ticket" method="post">
       <label for="phone">Phone Number:</label>
       <input class="form-control" type="text" name="phone" id="phone" required placeholder="તમારો ફોન નંબર" />
         <br>
@@ -216,7 +216,7 @@
     </form>
 
     <!-- Email Login Form -->
-    <form id="emailForm" class="form-section" action="" method="POST">
+    <form id="emailForm" class="form-section" action="/users/get-ticket" method="post">
       <label for="email">Email Address:</label>
       <input class="form-control" type="email" name="email" id="email" required placeholder="તમારું ઈમેલ" />
         <br>
@@ -227,6 +227,24 @@
 
 
  <script>
+    document.getElementById("bookForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const form = e.target;
+
+  const formData = new FormData(form);
+  const payload = new URLSearchParams(formData);
+
+  const response = await fetch('/users/bookTicket', {
+    method: 'POST',
+    body: payload
+  });
+
+  const data = await response.json();
+  if (data.redirectUrl) {
+    window.open(data.redirectUrl, '_blank');
+  }
+});
+
   function openModal(id) {
     document.getElementById(id).style.display = 'block';
   }

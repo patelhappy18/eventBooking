@@ -2,16 +2,57 @@
 <html>
 <head>
   <title>Your Tickets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>Chanasma Ujavni</title>
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
+    <link rel="stylesheet" href="assets/css/animated.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
 </head>
 <body>
   <h2>Thanks for booking, {{name}}!</h2>
-  <h3>You have booked {{tickets.length}} ticket(s)</h3>
+<h3>You booked {{tickets.length}} ticket(s):</h3>
 
-  {{#each tickets}}
-    <div style="margin-bottom: 20px;">
-      <p><strong>Ticket ID:</strong> {{this.ticketId}}</p>
-      <img src="{{this.qrCode}}" width="200" />
-    </div>
-  {{/each}}
+{{#each tickets}}
+  <div style="margin-bottom: 20px;">
+    {{!-- <p><strong>Ticket ID:</strong> {{this.ticketId}}</p> --}}
+    <img src="{{this.qrCode}}" width="200" class="qr-image" data-id="{{this.ticketId}}" />
+    <br />
+    <button class="btn btn-primary" onclick="downloadQR('{{this.qrCode}}', '{{this.ticketId}}')">Download Ticket</button>
+  </div>
+{{/each}}
+
+
+<script>
+window.onload = function () {
+  const qrImages = document.querySelectorAll('.qr-image');
+
+  qrImages.forEach((img, index) => {
+    setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = img.src;
+      link.download = 'Ticket-' + img.dataset.id + '.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, index * 1000); // 1 second delay between each download
+  });
+};
+
+  function downloadQR(dataURL, ticketId) {
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'Ticket-' + ticketId + '.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+
 </body>
 </html>
