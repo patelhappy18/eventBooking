@@ -39,6 +39,10 @@ app.get("/", (req, res) => {
   res.render("dashboard");
 });
 
+app.get("/admin/scan", (req, res) => {
+  res.render("scanner"); // shows the scanner page
+});
+
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
