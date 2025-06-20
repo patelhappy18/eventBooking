@@ -50,7 +50,7 @@
 
     setTimeout(() => {
       flash.style.display = "none";
-    }, 3000);
+    }, 1000);
   }
 
  let canScan = true; // cooldown flag
@@ -61,33 +61,29 @@
     canScan = false; // disable further scans
     console.log("Scanned:", decodedText);
 
-    // Redirect after a short delay (e.g., 1 sec)
     setTimeout(() => {
+          canScan = true;
+        }, 4000);
+
       window.location.href = `/users/validate/${decodedText}`;
-    }, 2000);
+
 
     // Reactivate scanner after 4 seconds
-    setTimeout(() => {
-      canScan = true;
-    }, 4000);
-
+   
   }
 
   window.onload = () => {
-
   const html5QrCode = new Html5Qrcode("reader");
 
-  if(canScan){
-        html5QrCode.start(
+    setTimeout(() => {
+   html5QrCode.start(
       { facingMode: "environment" }, // 👈 Use back camera
       { fps: 10, qrbox: 250 },
       onScanSuccess
     ).catch(err => {
       console.error("Camera start error:", err);
       document.getElementById("result").innerText = "Camera access failed!";
-    });
-  }
-
+    });        }, 1000);
 
 };
 
