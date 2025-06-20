@@ -5,6 +5,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
 const oneDay = 1000 * 60 * 60 * 24;
 
 const connectDB = require("./db/connect");
@@ -20,10 +22,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: "keythatwillsignedthecookie",
-    saveUninitialized: true,
-    resave: false, // RESAVE Means for every request to the server we need new cookie
-    cookie: { maxAge: oneDay },
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URL, // from MongoDB Atlas or local Mongo
+      collectionName: "sessions",
+    }),
+    cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
   })
 );
 
